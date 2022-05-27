@@ -4,6 +4,8 @@ package com.example.wine;
 import com.example.wine.Classes.Region;
 import com.example.wine.Classes.Type;
 import com.example.wine.Classes.Winery;
+import com.example.wine.spa.WineSpa;
+import com.example.wine.spa.WineSpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -11,70 +13,64 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-class LoadData {
-
+class LoadDatabase {
 
   private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
   @Bean CommandLineRunner initDatabase(
+      WineSpaRepository wineSpaRepository,
       RegionRepository regionRepository,
       TypeRepository typeRepository,
       WineryRepository wineryRepository,
       WineRepository wineshopRepository) {
 
     return args -> {
-      Region alicante = new Region("Alicante", "Espana");
-      Region bierzo   = new Region("Bierzo", "Espana");
-      Region cadiz    = new Region("Cadiz", "Espana");
 
-      Type red    = new Type("Red");
-      Type mencia = new Type("Mencia");
-      Type syrah  = new Type("Syrah");
+      if (regionRepository.count() < 1) {
 
-      Winery losada          = new Winery("Losada");
-      Winery enrique_mendoza = new Winery("Enrique Mendoza");
-      Winery albala          = new Winery("Huerta de Albala");
-
-      Wine wine1 = new Wine("Santa Rosa", 2017, 42f, 420, 189, 4, 3);
-      alicante.addWine(wine1);
-      red.addWine(wine1);
-      albala.addWine(wine1);
-
-      Wine wine2 = new Wine("Altos de Losada", 2018, 42f, 415, 179, 4, 3);
-      bierzo.addWine(wine2);
-      mencia.addWine(wine2);
-      losada.addWine(wine2);
+        wineSpaRepository
+            .findAll()
+            .stream()
+            .map(WineSpa::getRegion)
+            .distinct()
+            .forEach(r -> regionRepository.save(new Region(r, "Espana")));
 
 
-      Wine wine3 = new Wine("Tintilla de Rota", 2016, 46f, 92, 47, 4, 3);
-      cadiz.addWine(wine3);
-      syrah.addWine(wine3);
-      enrique_mendoza.addWine(wine3);
+        wineSpaRepository.findAll()
+                         .stream()
+                         .map(WineSpa::getType)
+                         .distinct()
+                         .forEach(t -> typeRepository.save(new Type(t)));
 
 
-      regionRepository.save(alicante);
-      regionRepository.save(bierzo);
-      regionRepository.save(cadiz);
+        wineSpaRepository.findAll()
+                         .stream()
+                         .map(WineSpa::getWinery)
+                         .distinct()
+                         .forEach(w -> wineryRepository.save(new Winery(w)));
 
-      typeRepository.save(red);
-      typeRepository.save(mencia);
-      typeRepository.save(syrah);
 
-      wineryRepository.save(losada);
-      wineryRepository.save(enrique_mendoza);
-      wineryRepository.save(albala);
+        wineSpaRepository.findAll().forEach(wineSpa -> {
+          Wine wine = new Wine();
+          wine.setName(wineSpa.getWine());
+          wine.setBody(wineSpa.getBody());
+          wine.setAcidity(wineSpa.getAcidity());
+          wine.setRating(wineSpa.getRating());
+          wine.setNum_reviews(wineSpa.getNum_reviews());
+          wine.setYear(wineSpa.getYear());
+          wine.setPrice(wineSpa.getPrice());
+          Region r = regionRepository.findByName(wineSpa.getRegion());
+          wine.setRegion(r);
+          Type t = typeRepository.findByName(wineSpa.getType());
+          wine.setType(t);
+          Winery winery = wineryRepository.findByName(wineSpa.getWinery());
+          wine.setWinery(winery);
+          wineshopRepository.save(wine);
+        });
+      }
 
-      wineshopRepository.save(wine1);
-      wineshopRepository.save(wine2);
-      wineshopRepository.save(wine3);
 
-      regionRepository.findAll().forEach(r -> log.info("Preloaded: " + r));
-
-      typeRepository.findAll().forEach(t -> log.info("Preloaded: " + t));
-
-      wineryRepository.findAll().forEach(winery -> log.info("Preloaded: " + winery));
-
-      wineshopRepository.findAll().forEach(w -> log.info("Preloaded " + w));
+      log.info("Total Preloaded " + wineshopRepository.count());
     };
   }
 }

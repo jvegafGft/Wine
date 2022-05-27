@@ -4,11 +4,9 @@ import com.example.wine.Classes.Region;
 import com.example.wine.Exceptions.RegionNotFoundException;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,11 +25,13 @@ public class RegionController {
     }
 
     @PostMapping("/region")
-    ResponseEntity<?> newRegion(@RequestBody Region newRegion) {
+    ResponseEntity<?> newRegion(@RequestBody Region region) {
 
-        Region region = repository.findById(id)
-                                  .orElseThrow(() -> new RegionNotFoundException(id));
-        return assembler.toModel(region);
+        repository.save(region);
+        EntityModel<Region> entityModel = assembler.toModel(region);
+
+        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                             .body(entityModel);
     }
 
     @GetMapping("/api/region")
@@ -42,7 +42,7 @@ public class RegionController {
                                                      .collect(Collectors.toList());
 
 
-        return CollectionModel.of(type, linkTo(methodOn(RegionController.class).all()).withSelfRel());
+        return CollectionModel.of(region, linkTo(methodOn(RegionController.class).all()).withSelfRel());
     }
 
     @GetMapping("/region/{id}")
@@ -71,8 +71,8 @@ public class RegionController {
         EntityModel<Region> entityModel = assembler.toModel(updatedRegion);
 
         return ResponseEntity //
-                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
-                .body(entityModel);
+                              .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
+                              .body(entityModel);
     }
 
     @DeleteMapping("/region/{id}")

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -22,12 +21,12 @@ public class Wine {
   private Long id;
 
   private String name;
-  private int    wineYear;
-  private float  rating;
+  private String year;
+  private double rating;
   private int    num_reviews;
-  private int    price;
-  private int    body;
-  private int    acidity;
+  private double price;
+  private String body;
+  private String acidity;
 
   @ManyToOne()
   @JoinColumn(name = "region_id")
@@ -44,9 +43,9 @@ public class Wine {
   @JsonIgnore
   private Winery winery;
 
-  public Wine(String name, int wineYear, float rating, int num_reviews, int price, int body, int acidity) {
+  public Wine(String name, String year, double rating, int num_reviews, double price, String body, String acidity) {
     this.name        = name;
-    this.wineYear    = wineYear;
+    this.year        = year;
     this.rating      = rating;
     this.num_reviews = num_reviews;
     this.price       = price;
@@ -58,7 +57,7 @@ public class Wine {
     return "Wine{" +
            "id=" + id +
            ", name='" + name + '\'' +
-           ", wineYear=" + wineYear +
+           ", wineYear=" + year +
            ", rating=" + rating +
            ", num_reviews=" + num_reviews +
            ", price=" + price +

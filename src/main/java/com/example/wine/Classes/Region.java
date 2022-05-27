@@ -1,16 +1,14 @@
 package com.example.wine.Classes;
 
-import com.example.wine.Wine;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-import javax.persistence.*;
-import java.util.HashSet;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Objects;
-import java.util.Set;
 
 
 @Getter
@@ -20,12 +18,9 @@ import java.util.Set;
 public class Region {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long      id;
-  private String    name;
-  private String    country;
-  @OneToMany(mappedBy = "region")
-  @JsonIgnore
-  private Set<Wine> wines;
+  private Long   id;
+  private String name;
+  private String country;
 
 
   public Region(String name, String country) {
@@ -33,29 +28,16 @@ public class Region {
     this.country = country;
   }
 
-  public void addWine(Wine wine) {
-    if (wines == null) {
-      wines = new HashSet<>();
-    }
-    wines.add(wine);
-    wine.setRegion(this);
-  }
-
-  public void removeWine(Wine wine) {
-    wines.remove(wine);
-    wine.setRegion(null);
-  }
-
   @Override public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof Region)) return false;
     Region region = (Region) o;
     return Objects.equals(getId(), region.getId()) && getName().equals(region.getName()) && getCountry().equals(
-        region.getCountry()) && Objects.equals(getWines(), region.getWines());
+        region.getCountry());
   }
 
   @Override public int hashCode() {
-    return Objects.hash(getId(), getName(), getCountry(), getWines());
+    return Objects.hash(getId(), getName(), getCountry());
   }
 
   @Override public String toString() {
