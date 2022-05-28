@@ -23,7 +23,7 @@ public class WineController {
         this.repository = repository;
         this.assembler = assembler;
     }
-    @PostMapping("/wine")
+    @PostMapping("/api/wine")
     ResponseEntity<?> newWine(@RequestBody Wine newWine) {
 
         EntityModel<Wine> entityModel = assembler.toModel(repository.save(newWine));
@@ -33,7 +33,7 @@ public class WineController {
                 .body(entityModel);
     }
 
-    @GetMapping("/wine/{id}")
+    @GetMapping("/api/wine/{id}")
     EntityModel<Wine> one(@PathVariable int id) {
 
         Wine wine = repository.findById(id) //
@@ -41,7 +41,7 @@ public class WineController {
         return assembler.toModel(wine);
     }
 
-    @GetMapping("/wine")
+    @GetMapping("/api/wine")
     CollectionModel<EntityModel<Wine>> all() {
 
         List<EntityModel<Wine>> wines = repository.findAll().stream() //
@@ -51,13 +51,13 @@ public class WineController {
         return CollectionModel.of(wines, linkTo(methodOn(WineController.class).all()).withSelfRel());
     }
 
-    @PutMapping("/wine/{id}")
+    @PutMapping("/api/wine/{id}")
     ResponseEntity<?> replaceWine(@RequestBody Wine newWine, @PathVariable int id) {
 
         Wine updatedEmployee = repository.findById(id) //
                 .map(wine -> {
                     wine.setName(newWine.getName());
-                    wine.setYear_w(newWine.getYear_w());
+                    wine.setYear(newWine.getYear());
                     wine.setRating(newWine.getRating());
                     wine.setNum_reviews(newWine.getNum_reviews());
                     wine.setPrice(newWine.getPrice());
@@ -81,7 +81,7 @@ public class WineController {
                 .body(entityModel);
     }
 
-    @DeleteMapping("/wine/{id}")
+    @DeleteMapping("/api/wine/{id}")
     ResponseEntity<?> deleteWine(@PathVariable int id) {
 
         repository.deleteById(id);

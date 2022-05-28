@@ -22,9 +22,9 @@ public class Wine {
 
   private String name;
   private String year;
-  private double rating;
-  private int    num_reviews;
-  private double price;
+  private String rating;
+  private String num_reviews;
+  private String price;
   private String body;
   private String acidity;
 
@@ -43,7 +43,7 @@ public class Wine {
   @JsonIgnore
   private Winery winery;
 
-  public Wine(String name, String year, double rating, int num_reviews, double price, String body, String acidity) {
+  public Wine(String name, String year, String rating, String num_reviews, String price, String body, String acidity) {
     this.name        = name;
     this.year      = year;
     this.rating      = rating;
