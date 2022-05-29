@@ -27,8 +27,22 @@ public class RecommendsController {
 
     @GetMapping("/api/recommends/best")
     CollectionModel<EntityModel<Wine>> bestRecommend(@RequestParam(defaultValue = "10") int top) {
-        List<EntityModel<Wine>> wines = repository.findTopWinesByRatingNative(top).stream().map(assembler::toModel).collect(Collectors.toList());
+        List<EntityModel<Wine>> wines = repository.findTopWinesByTwoCriteriaNative("rating", "num_reviews", top).stream().map(assembler::toModel).collect(Collectors.toList());
 
         return CollectionModel.of(wines, linkTo(methodOn(RecommendsController.class).bestRecommend(top)).withSelfRel());
+    }
+
+    @GetMapping("/api/recommends/expensive")
+    CollectionModel<EntityModel<Wine>> expensiveRecommend(@RequestParam(defaultValue = "10") int top) {
+        List<EntityModel<Wine>> wines = repository.findTopWinesByOneCriteriaNative("price", top).stream().map(assembler::toModel).collect(Collectors.toList());
+
+        return CollectionModel.of(wines, linkTo(methodOn(RecommendsController.class).expensiveRecommend(top)).withSelfRel());
+    }
+
+    @GetMapping("/api/recommends/bang")
+    CollectionModel<EntityModel<Wine>> bangRecommend(@RequestParam(defaultValue = "10") int top) {
+        List<EntityModel<Wine>> wines = repository.findTopWinesByCrossCriteriaNative("rating", "price", top).stream().map(assembler::toModel).collect(Collectors.toList());
+
+        return CollectionModel.of(wines, linkTo(methodOn(RecommendsController.class).bangRecommend(top)).withSelfRel());
     }
 }
