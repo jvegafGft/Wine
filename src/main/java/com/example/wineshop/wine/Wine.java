@@ -1,8 +1,9 @@
-package com.example.wine;
+package com.example.wineshop.wine;
 
-import com.example.wine.Classes.Region;
-import com.example.wine.Classes.Type;
-import com.example.wine.Classes.Winery;
+
+import com.example.wineshop.region.Region;
+import com.example.wineshop.type.Type;
+import com.example.wineshop.winery.Winery;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class Wine {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="id", nullable=false)
   @NotNull(message= "No puede ser nulo")
-  private Long id;
+  private Integer id;
 
   @NotEmpty(message= "Tiene que haber nombre")
   private String name;
@@ -33,7 +34,7 @@ public class Wine {
   @NotNull
   @Min(1900)
   @Max(2022)
-  private String year;
+  private Integer year;
 
   @NotNull
   @Min(0)
@@ -46,17 +47,17 @@ public class Wine {
 
   @NotNull
   @Min(0)
-  private double price;
+  private Double price;
 
   @NotNull
   @Min(1)
   @Max(5)
-  private String body;
+  private Double body;
 
   @NotNull
   @Min(1)
   @Max(5)
-  private String acidity;
+  private Double acidity;
 
   @ManyToOne()
   @JoinColumn(name = "region_id")
@@ -73,7 +74,7 @@ public class Wine {
   @JsonIgnore
   private Winery winery;
 
-  public Wine(String name, String year, double rating, int num_reviews, double price, String body, String acidity) {
+  public Wine(String name, int year, double rating, int num_reviews, double price, double body, double acidity) {
     this.name        = name;
     this.year        = year;
     this.rating      = rating;
