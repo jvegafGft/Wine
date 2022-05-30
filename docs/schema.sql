@@ -31,11 +31,11 @@ create table wine
     `id`          int(11) AUTO_INCREMENT PRIMARY KEY,
     `name`        text COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
     `year`        int(11) DEFAULT NULL,
-    `body`        double                           DEFAULT NULL,
-    `acidity`     double                           DEFAULT NULL,
     `num_reviews` int(11) DEFAULT NULL,
     `rating`      double                           DEFAULT NULL,
     `price`       double                           DEFAULT NULL,
+    `body`        double                           DEFAULT NULL,
+    `acidity`     double                           DEFAULT NULL,
     `winery_id`   int REFERENCES winery (id),
     `type_id`     int REFERENCES `type` (id),
     `region_id`   int REFERENCES region (id)
