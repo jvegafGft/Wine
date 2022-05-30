@@ -17,16 +17,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Wine {
 
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
   private String name;
-  private String year;
-  private double rating;
-  private int    num_reviews;
-  private double price;
-  private String body;
-  private String acidity;
+  private Integer year;
+  private Double rating;
+  private Integer num_reviews;
+  private Double price;
+  private Double body;
+  private Double acidity;
 
   @ManyToOne()
   @JoinColumn(name = "region_id")
@@ -43,14 +44,14 @@ public class Wine {
   @JsonIgnore
   private Winery winery;
 
-  public Wine(String name, String year, double rating, int num_reviews, double price, String body, String acidity) {
-    this.name        = name;
-    this.year      = year;
-    this.rating      = rating;
+  public Wine(String name, Integer year, Double rating, Integer num_reviews, Double price, Double body, Double acidity) {
+    this.name = name;
+    this.year = year;
+    this.rating = rating;
     this.num_reviews = num_reviews;
-    this.price       = price;
-    this.body        = body;
-    this.acidity     = acidity;
+    this.price = price;
+    this.body = body;
+    this.acidity = acidity;
   }
 
   @Override public String toString() {
