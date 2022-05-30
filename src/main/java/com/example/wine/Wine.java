@@ -9,6 +9,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 
 @Getter
 @Setter
@@ -18,14 +23,39 @@ import javax.persistence.*;
 public class Wine {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name="id", nullable=false)
+  @NotNull(message= "No puede ser nulo")
   private Long id;
 
+  @NotEmpty(message= "Tiene que haber nombre")
   private String name;
+
+  @NotNull
+  @Min(1900)
+  @Max(2022)
   private String year;
+
+  @NotNull
+  @Min(0)
+  @Max(5)
   private double rating;
+
+  @NotNull
+  @Min(0)
   private int    num_reviews;
+
+  @NotNull
+  @Min(0)
   private double price;
+
+  @NotNull
+  @Min(1)
+  @Max(5)
   private String body;
+
+  @NotNull
+  @Min(1)
+  @Max(5)
   private String acidity;
 
   @ManyToOne()

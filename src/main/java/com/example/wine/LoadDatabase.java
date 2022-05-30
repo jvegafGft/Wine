@@ -52,20 +52,25 @@ class LoadDatabase {
 
         wineSpaRepository.findAll().forEach(wineSpa -> {
           Wine wine = new Wine();
-          wine.setName(wineSpa.getWine());
-          wine.setBody(wineSpa.getBody());
-          wine.setAcidity(wineSpa.getAcidity());
-          wine.setRating(wineSpa.getRating());
-          wine.setNum_reviews(wineSpa.getNum_reviews());
-          wine.setYear(wineSpa.getYear());
-          wine.setPrice(wineSpa.getPrice());
-          Region r = regionRepository.findByName(wineSpa.getRegion());
-          wine.setRegion(r);
-          Type t = typeRepository.findByName(wineSpa.getType());
-          wine.setType(t);
-          Winery winery = wineryRepository.findByName(wineSpa.getWinery());
-          wine.setWinery(winery);
-          wineshopRepository.save(wine);
+
+
+            wine.setName(wineSpa.getWine());
+
+
+            wine.setBody(wineSpa.getBody());
+            wine.setAcidity(wineSpa.getAcidity());
+            wine.setRating(wineSpa.getRating());
+            wine.setNum_reviews(wineSpa.getNum_reviews());
+            wine.setYear(wineSpa.getYear());
+            wine.setPrice(wineSpa.getPrice());
+            Region r = regionRepository.findByName(wineSpa.getRegion());
+            wine.setRegion(r);
+            Type t = typeRepository.findByName(wineSpa.getType());
+            wine.setType(t);
+            Winery winery = wineryRepository.findByName(wineSpa.getWinery());
+            wine.setWinery(winery);
+            wineshopRepository.save(wine);
+
         });
       }
 
